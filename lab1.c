@@ -1,31 +1,23 @@
-#include <stdio.h>
-#include <math.h>
-#include <locale.h>
-int main() {
-	setlocale (LC_ALL, "RUSSIAN");
-    double a, b, c;
-    double D, x1, x2;
-    a = 1.0;
-    b = 3.0;
-    c = 2.0;
-    printf("Óðàâíåíèå: %.2f*x^2+%.2f*x+%.2f=0\n", a, b, c);
-    D = pow(b, 2)-4*a*c;
-    printf("Äèñêðèìèíàíò: D= %.2f\n", D);
+#include <stdio.h>   // printf
+#include <math.h>    // sqrt, pow
 
-    if (D>0) {
-        x1=(-b+sqrt(D))/(2*a);
-        x2=(-b-sqrt(D))/(2*a);
-        printf("Äâà êîðíÿ:\n");
-        printf("x1= %.4f\n",x1);
-        printf("x2= %.4f",x2);
+int main() {
+    double a = 1, b = -5, c = 6;                 // коэффициенты
+    double D = pow(b, 2) - 4 * a * c;            // дискриминант
+    double x1, x2;                               // корни
+
+    if (D > 0) {                                 // если 2 корня
+        x1 = (-b + sqrt(D)) / (2 * a);           // первый корень
+        x2 = (-b - sqrt(D)) / (2 * a);           // второй корень
+        printf("x1 = %.2lf\nx2 = %.2lf", x1, x2); // вывод корней
     }
-    else if (D==0) {
-        x1=-b/(2*a);
-        printf("Êîðåíü: x1= %.4f\n",x1);
+    else if (D == 0) {                           // если 1 корень
+        x1 = -b / (2 * a);                       // вычисление корня
+        printf("x = %.2lf", x1);                 // вывод корня
     }
-    else {
-        printf("Êîðíåé íåò");
-    }
-    return 0;
+    else                                         // если корней нет
+        printf("Корней нет");                    // вывод сообщения
+
+    return 0;                                    // конец программы
 }
 
