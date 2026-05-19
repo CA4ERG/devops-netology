@@ -1,112 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
-setlocale (LC_ALL, "RUSSIAN");
-static int* allocIntMatrix(int n) {
-    return (int*)malloc((size_t)n * n * sizeof(int));
-}
-static double* allocDoubleMatrix(int n) {
-    return (double*)malloc((size_t)n * n * sizeof(double));
-}
-static long long* allocLongLongMatrix(int n) {
-    return (long long*)calloc((size_t)n * n, sizeof(long long));
-}
-static void freeMatrix(void *p) {
-    free(p);
-}
-static void inputDoubleMatrix(double *a, int n) {
-    int i, j;
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            printf("a[%d][%d] = ", i, j);
-            scanf("%lf", &a[i*n + j]);
+#include <windows.h> //–∫–æ–¥–∏—Ä–æ–≤–∫–∞ —Ä—É—Å—Å–∫–æ–≥–æ –≤ VSCode
+int main()
+{
+    SetConsoleOutputCP(CP_UTF8); //–∫–æ–¥–∏—Ä–æ–≤–∫–∞ —Ä—É—Å—Å–∫–æ–≥–æ –≤ VSCode
+    int m,n;
+    printf("–í–≤–µ–¥–∏—Ç–µ –∫–æ–ª-–≤–æ —Å—Ç—Ä–æ–∫ –∏ —Å—Ç–æ–ª–±—Ü–æ–≤ –º–∞—Ç—Ä–∏—Ü—ã(—á–µ—Ä–µ–∑ –ø—Ä–æ–±–µ–ª):\n");
+    scanf("%d %d",&m,&n);
+    double **mat = (double**)malloc(m * sizeof(double*));
+        for(int i = 0; i<m; i++){
+            mat[i] = (double*)malloc(n * sizeof(double));
         }
+    printf("–í–≤–µ–¥–∏—Ç–µ —ç–ª–µ–º–µ–Ω—Ç—ã –º–∞—Ç—Ä–∏—Ü—ã (—á–µ—Ä–µ–∑ –ø—Ä–æ–±–µ–ª) —Ä–∞–∑–º–µ—Ä - %d—Ö%d:\n",m,n);
+    for(int i=0;i<m;++i){
+        for(int j=0;j<n;++j){
+        scanf("%lf",&mat[i][j]);
+        }  
     }
-}
-static void inputIntMatrix(int *b, int n) {
-    int i, j;
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            printf("b[%d][%d] = ", i, j);
-            scanf("%d", &b[i*n + j]);
+
+    double sumg=0,sump=0;
+    for(int i=0;i<m;++i)
+        sumg+=mat[i][i],sump+=mat[i][m-1-i];
+    printf("–°—É–º–º–∞ –≥–ª–∞–≤–Ω–æ–π = %.2lf, –°—É–º–º–∞ –ø–æ–±–æ—á–Ω–æ–π = %.2lf\n",sumg,sump);
+    
+    if(m==n){
+        double **kvad = (double**)malloc(m * sizeof(double*));
+        for (int i = 0; i<m;++i){
+            kvad[i]=(double*)malloc(n*sizeof(double));
         }
-    }
-}
-static double sumMainDiagonalDouble(const double *a, int n) {
-    int i;
-    double sum = 0.0;
-    for (i = 0; i < n; i++) {
-        sum += a[i*n + i];
-    }
-    return sum;
-}
-static double sumSecondaryDiagonalDouble(const double *a, int n) {
-    int i;
-    double sum = 0.0;
-    for (i = 0; i < n; i++) {
-        sum += a[i*n + (n - 1 - i)];
-    }
-    return sum;
-}
-static void squareIntMatrix(const int *b, long long *c, int n) {
-    int i, j, k;
-    /* c = b * b */
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            long long s = 0;
-            for (k = 0; k < n; k++) {
-                s += (long long)b[i*n + k] * (long long)b[k*n + j];
+    
+    for(int i=0;i<m;++i){
+        for(int j=0;j<m;++j){
+            for(int k=0;k<m;++k)
+                kvad[i][j]+=mat[i][k]*mat[k][j];
             }
-            c[i*n + j] = s;
         }
-    }
-}
-static void printLongLongMatrix(const long long *m, int n) {
-    int i, j;
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            printf("%lld ", m[i*n + j]);
+
+    printf("–ö–≤–∞–¥—Ä–∞—Ç –º–∞—Ç—Ä–∏—Ü—ã:\n");
+    for(int i=0;i<m;++i){
+        for(int j=0;j<n;++j){
+            printf(" %3.0lf",kvad[i][j]);
         }
-        printf("\n");
+    printf("\n");
     }
-}
-int main(void) {
-    int n1, n2;
-    printf("Ç‚Â‰ËÚÂ ‡ÁÏÂ Í‚‡‰‡ÚÌÓÈ Ï‡ÚËˆ˚ double (‰Îﬂ ÛÒÎÓ‚Ëﬂ 3x3 ÔÓÒÚ‡‚¸ÚÂ 3): ");
-    scanf("%d", &n1);
-    if (n1 <= 0) {
-        printf("çÂÍÓÂÍÚÌ˚È ‡ÁÏÂ.\n");
-        return 1;
+    for(int i=0;i<m;++i){
+        free(kvad[i]);
+    
     }
-    double *A = allocDoubleMatrix(n1);
-    if (!A) {
-        printf("é¯Ë·Í‡ ‚˚‰ÂÎÂÌËﬂ Ô‡ÏﬂÚË.\n");
-        return 1;
+    free(kvad);
     }
-    printf("\nÇ‚Ó‰ Ï‡ÚËˆ˚ A (double %dx%d):\n", n1, n1);
-    inputDoubleMatrix(A, n1);
-    printf("\nëÛÏÏ‡ „Î‡‚ÌÓÈ ‰Ë‡„ÓÌ‡ÎË: %.10g\n", sumMainDiagonalDouble(A, n1));
-    printf("ëÛÏÏ‡ ÔÓ·Ó˜ÌÓÈ ‰Ë‡„ÓÌ‡ÎË: %.10g\n", sumSecondaryDiagonalDouble(A, n1));
-    freeMatrix(A);
-    printf("\nÇ‚Â‰ËÚÂ ‡ÁÏÂ Í‚‡‰‡ÚÌÓÈ Ï‡ÚËˆ˚ int (‰Îﬂ ÛÒÎÓ‚Ëﬂ 2x2 ÔÓÒÚ‡‚¸ÚÂ 2): ");
-    scanf("%d", &n2);
-    if (n2 <= 0) {
-        printf("çÂÍÓÂÍÚÌ˚È ‡ÁÏÂ.\n");
-        return 1;
+    else{
+        printf("!!!–ú–∞—Ç—Ä–∏—Ü–∞ –Ω–µ –∫–≤–∞–¥–∞—Ä–∞—Ç–Ω–∞—è!!!\n");
     }
-    int *B = allocIntMatrix(n2);
-    long long *C = allocLongLongMatrix(n2);
-    if (!B || !C) {
-        printf("é¯Ë·Í‡ ‚˚‰ÂÎÂÌËﬂ Ô‡ÏﬂÚË.\n");
-        freeMatrix(B);
-        freeMatrix(C);
-        return 1;
-    }
-    printf("\nÇ‚Ó‰ Ï‡ÚËˆ˚ B (int %dx%d):\n", n2, n2);
-    inputIntMatrix(B, n2);
-    squareIntMatrix(B, C, n2);
-    printf("\nä‚‡‰‡Ú Ï‡ÚËˆ˚ B (B*B):\n");
-    printLongLongMatrix(C, n2);
-    freeMatrix(B);
-    freeMatrix(C);
+   
+
+
+    
     return 0;
-}
+}   
