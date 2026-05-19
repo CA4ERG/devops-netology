@@ -1,9 +1,7 @@
 #include <stdlib.h>
-#include <windows.h> //Кодировка русского языка для VSCode
 #include <stdio.h>
 #include <string.h>
 int main(){
-SetConsoleOutputCP(CP_UTF8); //Кодировка русского языка для VSCode
 printf("1)Замена строчных\n");
 printf("Введите строку(до 80 значений на английском)\n");
 char str[81];
