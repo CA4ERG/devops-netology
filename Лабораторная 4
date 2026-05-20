@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+int main(){
+setlocale(LC_ALL, "ru_RU.UTF-8");
+double a=0,b=0,c=0,ploshad=0,perim=0;
+printf("Вычисляем периметр и площадь треугольника\n");
+printf("Введите длины стороны a:\n");
+scanf("%lf",&a);
+printf("Cтороны b:\n");
+scanf("%lf",&b);
+printf("Cтороны c:\n");
+scanf("%lf",&c);
+if(a<=0|| b<=0|| c<=0){
+    printf("*Ошибка* Стороны не могут быть меньше 1!\n");
+    return 1;
+}
+else if(a + b <= c || a + c <= b || b + c <= a) {
+    printf("*Ошибка* неравенство треугольника не соблюдается!\n");
+    return 1;  
+}
+else{
+    perim=per(a,b,c);
+    ploshad=s(perim,a,b,c);
+    printf("Треугольник со сторонами: %2.lf, %2.lf и %2.lf\n",a,b,c);
+    printf("Периметр равен: %2.lf, Площадь %2.lf\n",perim,ploshad);
+}
+
+return 0;
+}
