@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+
+int main() {
+	setlocale(LC_ALL, "Russian");
+	
+	double massiv[3][3];
+	int i, j;
+	double summa = 0;
+
+	printf("Введите элементы массива 3x3 (9 цифр через пробел):\n");
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			scanf("%lf", &massiv[i][j]);
+			summa += massiv[i][j]; // Добавляем каждый элемент к сумме
+		}
+	}
+
+	printf("\nВаш массив 3x3:\n");
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			printf("%8.2lf ", massiv[i][j]);
+		}
+		printf("\n");
+	}
+
+	printf("\nСумма всех элементов матрицы: %8.2lf\n", summa);
+
+	return 0;
+}
