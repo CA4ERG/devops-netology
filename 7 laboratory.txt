@@ -1,0 +1,72 @@
+#include <stdio.h> // библиотека ввода-вывода
+#include <stdlib.h> // стандартная библиотека функций общего назначения
+#include <locale.h> // библиотека локализации (в программе devcppPortable выводит непонятные символы)
+#include <string.h> // библиотека необходима для работы с char
+
+
+struct humen { //структура humen с элементами char имя/фамилия и int год рождения
+	char name[100];
+	char familia[100];
+	int gotroshdeniya;
+};
+
+
+
+int main() {
+	setlocale(LC_ALL, "Russian");
+	const int elements = 4; // константа elments = 4
+	int i, j; // счетчики для циклов
+	struct humen people [elements]; // массив структур people на elements элементов типа struct humen
+	struct humen izmenyniepeople[elements]; // второй массив для хранения данных
+	
+	//Вывод данных через консоль
+	printf("Необходимо вывести данные %d человек:(имя, фамилия, год рождения):\n", elements);
+	for (i=0; i<elements; i++) {
+		printf ("Человек Номер %d\n", i+1);
+		printf ("Имя:");
+		scanf ("%s", people[i].name);
+		printf("Фамилия:");
+		scanf ("%s", people[i].familia);
+		printf ("Год рождения:");
+		scanf ("%d", &people[i].gotroshdeniya);
+		
+	}
+	
+
+	
+	for (i=0; i<elements; i++) {
+		izmenyniepeople[i] = people[i]; // копируем массив people в массив izmenyniepeople
+	}
+	
+	for (i=0; i<elements; i++) { //увеличиваем год рождения у всех в массиве izmenyniepeople (..Ввести с консоли или из файла элементы одного массива и построить на их основе другой..) (Оригинальный массив people не изменится)
+		izmenyniepeople[i].gotroshdeniya +=1;
+	}
+	
+	
+	//Сортируем по году рождения (сравниваем соседние элементы и меняем их местами, если неправильный порядок)
+	for (i=0; i<elements; i++) {
+		for (j=0; j<elements-i-1; j++) {
+			if (izmenyniepeople[j].gotroshdeniya > izmenyniepeople[j+1].gotroshdeniya) {
+				struct humen sortirovka = izmenyniepeople[j];
+				izmenyniepeople[j] = izmenyniepeople[j+1];
+				izmenyniepeople[j+1] = sortirovka;
+			}
+		}
+	}
+
+	//Выводим неотсортированный массив
+	printf("\nИсходный массив:\n");
+	for (i=0; i<elements; i++) {
+		printf("%s %s %d\n", people[i].name, people[i].familia,people[i].gotroshdeniya);
+	}
+	
+	
+	//Выводим отсортированный массив
+	printf("\nМассив, отсортированный по году рождения:\n");
+	for(i=0; i<elements; i++) {
+		printf("%s %s %d\n", izmenyniepeople[i].name, izmenyniepeople[i].familia,izmenyniepeople[i].gotroshdeniya);
+	}
+	
+	
+	return 0;
+}

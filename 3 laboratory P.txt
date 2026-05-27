@@ -1,0 +1,29 @@
+#include <stdio.h> // библиотека ввода-вывода
+#include <stdlib.h> // стандартная библиотека функций общего назначения
+#include <ctype.h> // библиотека, необходимая для функции toupper и tolower
+#include <locale.h> // библиотека локализации (в программе devcppPortable выводит непонятные символы)
+
+
+int main() {
+	
+	setlocale(LC_ALL, "Russian");
+	
+		
+	// Строка с переводом прописных на заглавные буквы
+	printf("Введите строку:");
+	
+	char stroka [80];
+	int u;
+	scanf("%s", &stroka);
+	printf("Это строка 80 символов:%s\n", stroka);
+	
+	for (u=0; stroka[u]!='\0'; u++) { // значение != '\0' это нулевой символ (когда закончили печатать <=80 не подойдет
+		if (stroka[u] == 'a' || stroka[u] == 'b') { // значение || означает 'или', не забудь
+			stroka[u] = toupper(stroka[u]);
+			
+		}
+	}
+	printf("Это строка с заглавными буквами 'a' и 'b':%s\n\n", stroka);
+	
+		return 0;
+}

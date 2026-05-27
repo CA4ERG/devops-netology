@@ -1,0 +1,103 @@
+#include <stdio.h> // библиотека ввода-вывода
+#include <string.h> // библиотека необходима для работы с char и strcmp (<0 - первая строка меньше второй, 0 если равны, >0 если первая больше)
+#include <stdlib.h> // стандартная библиотека функций общего назначения
+#include <locale.h> // библиотека локализации (в программе devcppPortable выводит непонятные символы)
+#define MAX_PEOPLE 50 // создание именованной константы
+
+typedef struct { // Структура Person c элементами (typedef поможет писать данную структуру без слова struct)
+    char firstName[30];
+    char lastName[30];
+    int birthYear;
+    char gender;
+    float height;
+} Person;
+
+// Функция сравнения двух записей
+int shouldSwap(Person a, Person b, int sortBy[4]) {
+    // Выводит в следующем виде: 1)год 2)фамилия 3)имя 4)пол 5)рост
+    
+    if (sortBy[0] && a.birthYear != b.birthYear) { //сортировка по году рождения
+        return a.birthYear > b.birthYear; // возвращает 1 если истинно (сортирует по возрастанию)
+    }
+    
+    if (sortBy[1]) { // сортировка по фамилии/имени
+        int cmpLast = strcmp(a.lastName, b.lastName);
+        if (cmpLast != 0) return cmpLast > 0;
+        
+        int cmpFirst = strcmp(a.firstName, b.firstName);
+        if (cmpFirst != 0) return cmpFirst > 0;
+    }
+    
+    if (sortBy[2] && a.gender != b.gender) { //сортировка по полу
+        return a.gender > b.gender;
+    }
+    
+    if (sortBy[3] && a.height != b.height) { //сортировка по росту
+        return a.height > b.height;
+    }
+    
+    return 0; // если все поля равны, не поменяет местами
+}
+
+int main() {
+	setlocale(LC_ALL, "Russian");
+    Person people[MAX_PEOPLE]; // массив структур на MAX_PEOPLE элементов
+    int count = 0, i, j;
+    
+    // чтение файла
+    FILE* f = fopen("data.txt", "r");
+    
+    
+    while (count < MAX_PEOPLE && 
+           fscanf(f, "%s %s %d %c %f", 
+                  people[count].firstName,
+                  people[count].lastName,
+                  &people[count].birthYear,
+                  &people[count].gender,
+                  &people[count].height) == 5) { // должно быть прочитано 5 значений
+        count++; //увеличиваем счетчик
+    }
+    fclose(f);
+    
+    printf("Загружено: %d\n\n", count); // выводим количество записей в файле data.txt
+    
+    // Выбор полей
+    int sortBy[4] = {0}; // массив критериев сортировки (инициализируем нулями)
+    printf("Сортировать по (цифры через пробел):\n");
+    printf("1-год 2-имя 3-пол 4-рост\nВвод: ");
+    
+    char line[100];
+    getchar(); // очищаем символы новой строки из предыдущего ввода
+    fgets(line, sizeof(line), stdin); // чтение строки целиком
+    
+    char* num = strtok(line, " \n"); // разделяем троки по пробелам и переводам строк
+    while (num) { // пока есть токены
+        int n = atoi(num); //преобразование строки в число
+        if (n >= 1 && n <= 4) sortBy[n-1] = 1; // установка соответствующего критерия
+        num = strtok(NULL, " \n"); //следующий токен
+    }
+    
+    // Сортировка пузырьком (изучили на предмете Алгоритмы и структуры данных на C) (Проходим по массиву и сравниваем элементы, если левый больше правого - меняем местами)
+    for (i = 0; i < count-1; i++) {
+        for (j = 0; j < count-i-1; j++) {
+            if (shouldSwap(people[j], people[j+1], sortBy)) {
+                Person temp = people[j];
+                people[j] = people[j+1];
+                people[j+1] = temp;
+            }
+        }
+    }
+    
+    // Вывод результата
+    printf("\nРезультат:\n");
+    for (i = 0; i < count; i++) {
+        printf("%s %s %d %c %.2f\n",
+               people[i].firstName,
+               people[i].lastName,
+               people[i].birthYear,
+               people[i].gender,
+               people[i].height);
+    }
+    
+    return 0;
+}

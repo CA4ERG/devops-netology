@@ -1,0 +1,146 @@
+#include <stdio.h> // библиотека ввода-вывода
+#include <stdlib.h> // стандартная библиотека функций общего назначения
+#include <ctype.h> // библиотека, необходимая для функции toupper и tolower
+#include <locale.h> // библиотека локализации (в программе devcppPortable выводит непонятные символы)
+
+
+int main() {
+	
+	setlocale(LC_ALL, "Russian");
+	
+	printf ("Что вы хотите выбрать:\n1)Ввести строку (до 80 символов), где автоматически прописные буквы 'a' и 'b' станут заглавными (Цифра 1)\n");
+	printf ("2)Матрицу 3 на 3, в которой посчитается сумма главной и дополнительной диагонали, а также является ли данная матрица 'магическим квадратом' (Цифра 2)\n");
+	printf("3)Произвольную матрицу , в которой посчитается сумма главной и дополнительной диагонали, а также является ли данная матрица 'магическим квадратом' (Цифра 3)\n");
+	
+	int vibor;
+	scanf ("%d", &vibor);
+	
+	if (vibor == 1) {
+	
+	
+	// Строка с переводом прописных на заглавные буквы
+	printf("Введите строку:");
+	
+	char stroka [80];
+	int u;
+	scanf("%s", &stroka);
+	printf("Это строка 80 символов:%s\n", stroka);
+	
+	for (u=0; stroka[u]!='\0'; u++) { // значение != '\0' это нулевой символ (когда закончили печатать <=80 не подойдет
+		if (stroka[u] == 'a' || stroka[u] == 'b') { // значение || означает 'или', не забудь
+			stroka[u] = toupper(stroka[u]);
+			
+		}
+	}
+	printf("Это строка с заглавными буквами 'a' и 'b':%s\n\n", stroka);
+}
+	
+	else if (vibor == 2) {
+	
+
+	//Матрица 3 на 3
+	printf("Введите элементы матрицы 3 на 3 (в строчку через пробел):");
+	
+	int massig[3][3];
+	int i,j; //строка и столбец матрицы
+	
+	for (i=0; i<3; i++) {
+		for (j=0; j<3; j++) {
+			scanf("%d", &massig[i][j]);
+		}
+	}
+	
+	//сумма элементов на основной и побочной диагонали массива 3 на 3
+	
+	double summaosnova3na3 = massig[0][0] + massig[1][1] + massig[2][2];
+	printf("сумма главной диагонали будет равно = %8.2lf\n", summaosnova3na3);
+	double summadopoln3na3 = massig[2][0] + massig[1][1] + massig[0][2];
+	printf("сумма дополнительной диагонали будет равно = %8.2lf\n", summadopoln3na3);
+	
+	
+	//Проверка на магический квадрат
+	int magkvadrat;
+	
+	if (summaosnova3na3 == summadopoln3na3) {
+		magkvadrat = 1;	
+	}
+	
+	if (magkvadrat == 1) {
+		printf ("Данная матрица является магическим квадратом\n");
+	}
+	else {
+		printf ("Данная матрица не является магическим квадратом\n");
+	}	
+}
+
+
+	else if (vibor == 3) {
+	
+	
+	//Произвольная матрица
+	 int size; // Объявление произвольной матрицы
+	 int i,j,k;
+        printf("Введите размер произвольной матрицы: ");
+        scanf("%d", &size);
+        
+        double **matrix = (double **)malloc(size * sizeof(double *)); // **matrix = (double **) - объявляем указатель matrix на double; malloc(size * sizeof(double *) - выедляем память size на указатель double
+        for (i = 0; i < size; i++) {
+            matrix[i] = (double *)malloc(size * sizeof(double));
+        }
+
+        // Ввод элементов произвольной матрицы
+        printf("Введите элементы матрицы %d на %d(в строчку через пробел):", size, size);
+        for (i = 0; i < size; i++) {
+            for (j = 0; j < size; j++) {
+                scanf("%lf", &matrix[i][j]);
+            }
+        }
+
+
+        // Сумма элементов на основной и побочной диагонали произвольной матрицы
+        double sumMainDiagonal = 0, sumSecondaryDiagonal = 0;
+        for (i = 0; i < size; i++) {
+            sumMainDiagonal += matrix[i][i];
+            sumSecondaryDiagonal += matrix[i][size - 1 - i];
+        }
+        printf("Сумма главной диагонали: %8.2lf\n", sumMainDiagonal);
+        printf("Сумма дополнительной диагонали: %8.2lf\n", sumSecondaryDiagonal);
+
+
+	//Проверка на магический квадрат
+	int magkvadratproizvol;
+	
+	if (sumMainDiagonal == sumSecondaryDiagonal) {
+		magkvadratproizvol = 1;	
+	}
+	
+	if (magkvadratproizvol == 1) {
+		printf ("Данная матрица является магическим квадратом");
+	}
+	else {
+		printf ("Данная матрица не является магическим квадратом");
+	}	
+
+
+        // Освобождение выделенной памяти
+        for (i = 0; i < size; i++) {
+            free(matrix[i]);
+           
+        }
+        free(matrix);
+}
+
+
+
+	else {
+		printf("Ошибка, необходимо указать одну из трёх цифр");
+	}
+
+
+    
+	
+	
+	
+	
+	return 0;
+}

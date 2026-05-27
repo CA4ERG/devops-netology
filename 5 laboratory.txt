@@ -1,0 +1,96 @@
+#include <stdio.h> // библиотека ввода-вывода
+#include <stdlib.h> // стандартная библиотека функций общего назначения
+#include <locale.h> // библиотека локализации (в программе devcppPortable выводит непонятные символы)
+#include "sloshvichetumnosh.h"
+
+/** Вынесли данную функцию в отдельный модуль sloshvichetumnosh.h
+// n1, m1 - размеры матрицы A; n2, m2 - размеры матрицы B
+double** calculate_matrix(int n1, int m1, int n2, int m2, double **A, double **B, char op, int *res_n, int *res_m) { //n1 n2 - строки; m1 m2 - столбцы; **A и **B указатели на матрицы; op - символ + - * ; *res_n *res_m указатели, которые сообщают размер матрицы
+    int i, j, k;
+    
+    // Проверка условий
+    if ((op == '+' || op == '-') && (n1 != n2 || m1 != m2)) {
+        printf("Ошибка: Размеры матриц должны совпадать для +/-!\n");
+        return NULL;
+    }
+    if (op == '*' && m1 != n2) {
+        printf("Ошибка: Число столбцов A должно быть равно числу строк B!\n");
+        return NULL;
+    }
+
+    // Определяем размеры результата
+    *res_n = n1;
+    *res_m = (op == '*') ? m2 : m1; // если op = * ? (если да то) m2 (Истинно (при умножении матриц количество столбцов результата всегда равно второй матрицы) :(иначе) m1 (Ложно 1 матрицы)
+
+    double **res = (double **)malloc((*res_n) * sizeof(double *)); // **res = (double **) - объявляем указатель **res на указатель; malloc((*res_n) * sizeof(double *) - выедляем память для массива из (*res_n) указателей (строки матрицы)
+    for (i = 0; i < *res_n; i++) {
+        res[i] = (double *)calloc(*res_m, sizeof(double)); // calloc не только выделит память, но и заполнит нулями (необходимо для умножения)
+    }
+
+    for (i = 0; i < *res_n; i++) {
+        for (j = 0; j < *res_m; j++) {
+            if (op == '+') res[i][j] = A[i][j] + B[i][j];
+            else if (op == '-') res[i][j] = A[i][j] - B[i][j];
+            else if (op == '*') {
+                for (k = 0; k < m1; k++) { // К шагает по строке А и столбцу В
+                    res[i][j] += A[i][k] * B[k][j];
+                }
+            }
+        }
+    }
+    return res;
+}
+**/
+int main() {
+    setlocale(LC_ALL, "Russian");
+    int n1, m1, n2, m2, i, j, res_n, res_m;
+    char op;
+
+    // Матрица A
+    printf("Размеры матрицы A (Сколько строк и столбцов, указать 2 цифры через пробел):");
+    scanf("%d %d", &n1, &m1);
+	printf("\nУкажите элементы матрицы А через пробел:");
+    double **matrix1 = (double **)malloc(n1 * sizeof(double *));
+    for (i = 0; i < n1; i++) {
+        matrix1[i] = (double *)malloc(m1 * sizeof(double));
+        for (j = 0; j < m1; j++) {
+		scanf("%lf", &matrix1[i][j]);
+		}
+	
+    }
+
+    // Матрица B
+    printf("\nРазмеры матрицы B (Сколько строк и столбцов, указать 2 цифры через пробел):");
+    scanf("%d %d", &n2, &m2);
+    printf("\nУкажите элементы матрицы В через пробел:");
+    double **matrix2 = (double **)malloc(n2 * sizeof(double *));
+    for (i = 0; i < n2; i++) {
+        matrix2[i] = (double *)malloc(m2 * sizeof(double));
+        for (j = 0; j < m2; j++) {
+		scanf("%lf", &matrix2[i][j]);
+		}
+    }
+
+    printf("\nОперация (+, -, *): ");
+    scanf(" %c", &op); // %c - читаем один символб &op - адрес перемноой op, куда запишем символ
+
+    double **result = calculate_matrix(n1, m1, n2, m2, matrix1, matrix2, op, &res_n, &res_m); // выполнение функции (не забыть, что &res_n, &res_m - символ & перед ними нужен, чтобы функция могла изменить значения res_n, res_m
+
+
+        printf("\nРезультат:\n");
+        for (i = 0; i < res_n; i++) {
+            for (j = 0; j < res_m; j++) printf("%8.2lf ", result[i][j]);
+            printf("\n");
+        }
+        // Очистка памяти результата
+        for (i = 0; i < res_n; i++) free(result[i]);
+        free(result);
+
+    // Очистка A и B
+    for (i = 0; i < n1; i++) free(matrix1[i]);
+    free(matrix1);
+    for (i = 0; i < n2; i++) free(matrix2[i]);
+    free(matrix2);
+
+    return 0;
+}
