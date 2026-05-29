@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    FILE *in = fopen("input.txt", "r");
+    FILE *out = fopen("output.txt", "w");
+    char f[50], i[50], o[50];
+    int y;
+    while(fscanf(in, "%49s %49s %49s %d", f, i, o, &y) == 4)
+        if(strcmp(f, "Иванов")==0 && y>1980)
+            fprintf(out, "%s %s %s %d\n", f, i, o, y);
+    fclose(in);
+    fclose(out);
+}
