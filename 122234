@@ -1,0 +1,150 @@
+Фильтрация записей по году рождения на
+Copilot Chat
+Фильтрация записей по году рождения на
+You said: Создать текстовый файл с записями следующего вида: Иванов
+Создать текстовый файл с записями следующего вида:
+Иванов Петр Сергеевич 1975
+Сидоров Николай Андреевич 1981
+….
+Воробьянинов Ипполит Матвеевич 1978 
+
+Прочитать данные из этого файла и записать в другой только те строки, которые относятся к родившимся позднее 1980 года. Найди всех ивановый на чистом си без дополнительных библиотек, максимально сократи кот
+Copilot said: Я помогу вам создать программу на чистом
+Я помогу вам создать программу на чистом C для решения этой задачи. Создам файл с данными и программу для фильтрации записей по году рождения.Мы ждем вашего подтверждения для создания файлов в репозитории.
+
+Make these code changes?
+people.txt
+
+txt
+Иванов Петр Сергеевич 1975
+Сидоров Николай Андреевич 1981
+Петров Иван Иванович 1982
+Воробьянинов Ипполит Матвеевич 1978
+Иванов Сергей Петрович 1985
+Кузнецов Михаил Викторович 1979
+Иванов Дмитрий Сергеевич 1983
+Смирнов Алексей Ильич 1980
+Попов Иван Сергеевич 1988
+
+Please confirm you want Copilot to make this change in the CA4ERG/people-filter repository on the default branch.
+
+Make these code changes?
+filter.c
+
+C
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main(){FILE *in=fopen("people.txt","r"),*out=fopen("result.txt","w");
+char buf[256],*p,*e;int y;
+if(!in||!out)return 1;
+while(fgets(buf,256,in)){
+p=buf+strlen(buf)-1;
+while(p>buf&&!isdigit(*p))p--;
+e=p;
+while(p>buf&&isdigit(*p))p--;
+p++;y=0;
+while(p<=e)y=y*10+*p++-'0';
+if(y>1980)fputs(buf,out);
+}
+fclose(in);fclose(out);
+return 0;
+}
+
+Please confirm you want Copilot to make this change in the CA4ERG/people-filter repository on the default branch.
+
+You said: Создать текстовый файл с записями следующего вида: Иванов
+Создать текстовый файл с записями следующего вида:
+Иванов Петр Сергеевич 1975
+Сидоров Николай Андреевич 1981
+….
+Воробьянинов Ипполит Матвеевич 1978 
+
+Прочитать данные из этого файла и записать в другой только те строки, которые относятся к родившимся позднее 1980 года. Напиши код на си найди всех ивановых
+Copilot said: Ожидаем вашего подтверждения для создания файлов. **Краткое описание
+Ожидаем вашего подтверждения для создания файлов.
+
+Краткое описание программы:
+
+people.txt — исходный файл с данными о людях
+filter.c — программа на C, которая:
+Читает данные из people.txt
+Записывает в result.txt строки людей, родившихся позже 1980 года
+Выводит на экран всех Ивановых с подсчётом количества
+Использует только стандартные библиотеки (stdio.h, string.h, stdlib.h)
+Компиляция и запуск:
+
+bash
+gcc filter.c -o filter
+./filter
+Make these code changes?
+people.txt
+
+txt
+Иванов Петр Сергеевич 1975
+Сидоров Николай Андреевич 1981
+Петров Иван Иванович 1982
+Воробьянинов Ипполит Матвеевич 1978
+Иванов Сергей Петрович 1985
+Кузнецов Михаил Викторович 1979
+Иванов Дмитрий Сергеевич 1983
+Смирнов Алексей Ильич 1980
+Иванов Мария Ивановна 1988
+Попов Иван Сергеевич 1987
+
+Please confirm you want Copilot to make this change in the CA4ERG/people-filter repository on the default branch.
+
+Make these code changes?
+filter.c
+
+C
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAX_LINE 256
+
+int main(){
+    FILE *in, *out;
+    char buf[MAX_LINE];
+    int year, count = 0;
+    char *pos;
+    
+    in = fopen("people.txt", "r");
+    out = fopen("result.txt", "w");
+    
+    if(!in || !out) {
+        printf("Error opening files\n");
+        return 1;
+    }
+    
+    printf("=== People born after 1980 ===\n");
+    while(fgets(buf, MAX_LINE, in)) {
+        // Extract year from end of line
+        year = atoi(buf + strlen(buf) - 5);
+        
+        if(year > 1980) {
+            fputs(buf, out);
+            printf("%s", buf);
+        }
+    }
+    
+    // Find all Ivanovs
+    rewind(in);
+    count = 0;
+    printf("\n=== All Ivanovs ===\n");
+    while(fgets(buf, MAX_LINE, in)) {
+        if(strncmp(buf, "Иванов ", 7) == 0) {
+            printf("%s", buf);
+            count++;
+        }
+    }
+    printf("Total Ivanovs: %d\n", count);
+    
+    fclose(in);
+    fclose(out);
+    
+    printf("\nResults saved to result.txt\n");
+    return 0;
+}
