@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+int eq(const char *a, const char *b) { // сравнение строк
+    while(*a && *b && *a==*b) { a++; b++; }
+    return *a==*b;
+}
+
+int main() {
+    FILE *f = fopen("input.txt","w");
+    fprintf(f, "Иванов Петр Сергеевич 1975\nСидоров Николай Андреевич 1981\nИванов Алексей Иванович 1985\nВоробьянинов Ипполит Матвеевич 1978\n");
+    fclose(f);
+
+    FILE *in = fopen("input.txt","r");
+    FILE *out = fopen("output.txt","w");
+    char fn[50], i[50], o[50];
+    int y;
+
+    while(fscanf(in,"%49s %49s %49s %d", fn,i,o,&y)==4)
+        if(eq(fn,"Иванов") && y>1980)
+            fprintf(out,"%s %s %s %d\n", fn,i,o,y);
+
+    fclose(in);
+    fclose(out);
+}
