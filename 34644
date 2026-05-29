@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    // Создание исходного файла
+    FILE *in=fopen("input.txt","w");
+    fprintf(in,
+        "Иванов Петр Сергеевич 1975\n"
+        "Сидоров Николай Андреевич 1981\n"
+        "Воробьянинов Ипполит Матвеевич 1978\n"
+        "Иванов Алексей Викторович 1985\n"
+        "Иванов Дмитрий Сергеевич 1990\n"
+    );
+    fclose(in);
+
+    // Открываем для чтения и записи результатов
+    in=fopen("input.txt","r");
+    FILE *out=fopen("output.txt","w");
+    char f[50],n[50],o[50]; int g;
+    
+    while(fscanf(in,"%s %s %s %d",f,n,o,&g)==4)
+        if(g>1980 && strcmp(f,"Иванов")==0)
+            fprintf(out,"%s %s %s %d\n",f,n,o,g);
+
+    fclose(in); fclose(out);
+    return 0;
+}
