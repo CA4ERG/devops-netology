@@ -1,0 +1,33 @@
+import heapq
+
+# Таблица расстояний (матрица смежности)
+graph = {
+    'A': {'B': 1},
+    'B': {'A': 1, 'C': 2, 'D': 2, 'E': 7},
+    'C': {'B': 2, 'E': 3},
+    'D': {'B': 2, 'E': 4},
+    'E': {'B': 7, 'C': 3, 'D': 4}
+}
+
+def dijkstra(graph, start, end):
+    heap = [(0, start)]
+    visited = set()
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+
+    while heap:
+        dist, node = heapq.heappop(heap)
+        if node in visited:
+            continue
+        visited.add(node)
+        if node == end:
+            return dist
+        for neighbor, weight in graph[node].items():
+            if neighbor not in visited:
+                new_dist = dist + weight
+                if new_dist < distances[neighbor]:
+                    distances[neighbor] = new_dist
+                    heapq.heappush(heap, (new_dist, neighbor))
+
+# Вывод кратчайшего пути между A и E
+print("Кратчайшее расстояние A -> E:", dijkstra(graph, 'A', 'E'))
