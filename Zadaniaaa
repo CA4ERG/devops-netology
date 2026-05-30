@@ -1,0 +1,16 @@
+from math import factorial
+from collections import Counter
+
+def word_permutations(word):
+    n = len(word)
+    letter_counts = Counter(word)
+    denominator = 1
+    for count in letter_counts.values():
+        denominator *= factorial(count)
+    total = factorial(n) // denominator
+    return total
+
+# Ввод слова пользователем
+word = input("Введите слово: ").upper()  # Преобразуем в верхний регистр для удобства
+result = word_permutations(word)
+print(f"Количество перестановок для слова '{word}' = {result}")
