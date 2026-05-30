@@ -1,0 +1,19 @@
+import math
+
+# Ввод данных
+n = int(input("Введите n: "))
+m = int(input("Введите m: "))
+
+# Перестановки (P)
+P = math.factorial(n)
+
+# Размещения без повторений (A)
+A = math.factorial(n) // math.factorial(n - m)
+
+# Сочетания без повторений (C)
+C = math.factorial(n) // (math.factorial(m) * math.factorial(n - m))
+
+# Вывод результатов
+print(f"Перестановки P({n}) = {P}")
+print(f"Размещения A({n},{m}) = {A}")
+print(f"Сочетания C({n},{m}) = {C}")
