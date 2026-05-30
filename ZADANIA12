@@ -1,0 +1,41 @@
+from math import factorial
+from collections import Counter
+
+# ===============================
+# ЗАДАНИЕ 1: перестановки, размещения и сочетания
+# ===============================
+def permutations(n):
+    return factorial(n)
+
+def arrangements(n, m):
+    return factorial(n) // factorial(n - m)
+
+def combinations(n, m):
+    return factorial(n) // (factorial(m) * factorial(n - m))
+
+# Тестовые данные для задания 1
+n = 3
+m = 2
+
+print("=== ЗАДАНИЕ 1 ===")
+print(f"Перестановки P({n}) = {permutations(n)}")
+print(f"Размещения A({n},{m}) = {arrangements(n, m)}")
+print(f"Сочетания C({n},{m}) = {combinations(n, m)}")
+
+# ===============================
+# ЗАДАНИЕ 2: количество перестановок слова с повторяющимися буквами
+# ===============================
+def word_permutations(word):
+    n = len(word)
+    letter_counts = Counter(word)
+    denominator = 1
+    for count in letter_counts.values():
+        denominator *= factorial(count)
+    total = factorial(n) // denominator
+    return total
+
+# Тестовые данные для задания 2
+word = "КОЛОКОЛЬЧИК"
+
+print("\n=== ЗАДАНИЕ 2 ===")
+print(f"Количество перестановок для слова '{word}' = {word_permutations(word)}")
