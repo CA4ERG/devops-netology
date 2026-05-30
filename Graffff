@@ -1,0 +1,58 @@
+import heapq
+
+# Ввод количества вершин
+n = int(input("Введите количество вершин: "))
+
+# Ввод названий вершин
+vertices = []
+for i in range(n):
+    v = input(f"Введите название вершины {i+1}: ")
+    vertices.append(v)
+
+# Ввод таблицы смежности
+graph = {v: {} for v in vertices}
+print("Введите веса рёбер между вершинами (если рёбра нет, введите 0):")
+for i in range(n):
+    for j in range(n):
+        if i != j:
+            weight = int(input(f"{vertices[i]} -> {vertices[j]}: "))
+            if weight != 0:
+                graph[vertices[i]][vertices[j]] = weight
+
+# Ввод стартовой и конечной вершины
+start = input("Введите стартовую вершину: ")
+end = input("Введите конечную вершину: ")
+
+def dijkstra(graph, start, end):
+    queue = [(0, start)]
+    distances = {vertex: float('inf') for vertex in graph}
+    distances[start] = 0
+    visited = set()
+    previous = {vertex: None for vertex in graph}
+
+    while queue:
+        current_distance, current_vertex = heapq.heappop(queue)
+        if current_vertex in visited:
+            continue
+        visited.add(current_vertex)
+
+        for neighbor, weight in graph[current_vertex].items():
+            distance = current_distance + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                previous[neighbor] = current_vertex
+                heapq.heappush(queue, (distance, neighbor))
+
+    # Восстановление пути
+    path = []
+    v = end
+    while v is not None:
+        path.append(v)
+        v = previous[v]
+    path = path[::-1]
+
+    return distances[end], path
+
+distance, path = dijkstra(graph, start, end)
+print(f"Кратчайшее расстояние от {start} до {end}: {distance}")
+print(f"Путь: {' -> '.join(path)}")
