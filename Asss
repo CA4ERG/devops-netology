@@ -1,0 +1,16 @@
+from math import factorial
+from collections import Counter
+
+word = input("Введите слово: ")
+n = len(word)
+freq = Counter(word)
+denominator = 1
+for count in freq.values():
+    denominator *= factorial(count)
+
+permutations = factorial(n) // denominator
+
+print(f"\nСлово: {word}")
+print(f"Количество букв (n) = {n}")
+print(f"Число повторений букв: {dict(freq)}")
+print(f"Число перестановок с повторениями = {permutations}")
