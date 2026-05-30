@@ -1,0 +1,34 @@
+import heapq
+
+# Задаём граф в виде словаря смежности
+graph = {
+    'A': {'B': 1},
+    'B': {'A': 1, 'C': 2, 'D': 2, 'E': 7},
+    'C': {'B': 2, 'E': 3},
+    'D': {'B': 2, 'E': 4},
+    'E': {'B': 7, 'C': 3, 'D': 4}
+}
+
+def dijkstra(graph, start, end):
+    # Очередь приоритетов: (текущий_расстояние, вершина)
+    queue = [(0, start)]
+    distances = {vertex: float('inf') for vertex in graph}
+    distances[start] = 0
+    visited = set()
+
+    while queue:
+        current_distance, current_vertex = heapq.heappop(queue)
+        if current_vertex in visited:
+            continue
+        visited.add(current_vertex)
+
+        for neighbor, weight in graph[current_vertex].items():
+            distance = current_distance + weight
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(queue, (distance, neighbor))
+
+    return distances[end]
+
+shortest_distance = dijkstra(graph, 'A', 'E')
+print(f"Кратчайшее расстояние между A и E: {shortest_distance}")
